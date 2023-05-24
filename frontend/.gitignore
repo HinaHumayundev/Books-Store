@@ -1,0 +1,16 @@
+# Ignore specific package
+node_modules/package-name
+
+# Ignore all packages within node_modules
+node_modules/
+
+# Ignore Python virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# Ignore compiled Python files
+*.pyc
+__pycache__/
+
