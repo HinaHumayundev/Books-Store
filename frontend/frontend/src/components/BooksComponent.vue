@@ -26,6 +26,7 @@
                         <td>ME</td>
                         <td>
                             <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-danger btn-sm">Add</button>
                                 <button type="button" class="btn btn-info btn-sm">Update</button>
                                 <button type="button" class="btn btn-danger btn-sm">Delete</button>
                             </div>
