@@ -5,10 +5,12 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/slate/bootstrap.min.css" integrity="sha384-8iuq0iaMHpnH2vSyvZMSIqQuUnQA7QM+f6srIdlgBrTSEyd//AWNMyEaSF2yPzNQ" crossorigin="anonymous">
         <div class="row">
             <div class="col-sm-12">
-              <h1 class="text-center bg-primary" style="background: linear-gradient(to right, #757b85, #c9c8f1);border-radius:16px; font-family: 'Arial', sans-serif; color: #ffffff;">Book Library 📚</h1>
+              <h1 class="text-center bg-primary" style="background: linear-gradient(to right, #b3c2e0, #6598fd,  #1a1a1b);border-radius:16px; font-family: 'Arial', sans-serif; color: #ffffff;">Book Library 📚</h1>
 
                 <hr><br>
-                <button type="button" style="background: linear-gradient(to right, #757b85, #1a1a1b); color:#ffffff;" class="btn btn-sm" @click="$refs.addBookModal.show()">Add Book</button>
+                <b-alert variant="success" v-if="showMessage" show> {{ message }}
+                </b-alert>
+                <button type="button" style="background: linear-gradient(to right, #b3c2e0, #1a1a1b); color:#ffffff;" class="btn btn-sm" @click="$refs.addBookModal.show()">Add Book</button>
                 <br><br>
                 <table class="table table-hover">
                    <thead>
@@ -59,12 +61,11 @@
         </b-form-group>
 
          <!-- Read? -->
-         <b-form-group id="form-read-group">
-          <b-form-checkbox-group
-          id="form-read-checkbox"
-          v-model="addBookForm.read">
+         <b-form-group id="form-read-group" label-for="form-read-checkbox">
+         <b-form-checkbox-group id="form-read-checkbox" v-model="addBookForm.read">
+         <b-form-checkbox value="read">Read</b-form-checkbox>
           </b-form-checkbox-group>
-         </b-form-group>
+           </b-form-group>
 
          <b-button type="submit" variant="outline-info">Submit</b-button>
          <b-button type="reset" variant="outline-danger">Reset</b-button>
@@ -88,6 +89,8 @@ export default {
       },
     };
   },
+
+  message : "",
   methods: {
     //GET Function
     getBooks() {
@@ -109,6 +112,11 @@ export default {
     .post(path, payload)
     .then(() => {
       this.getBooks();
+      this.message =" Book Added!";
+      this.showMessage = true;
+      setTimeout(() => {
+        this.showMessage = false;
+      }, 3000);
     })
     .catch((err) => {
       console.log(err.data);
@@ -133,7 +141,12 @@ export default {
         genre: this.addBookForm.genre,
         read,
       };
-      this.addBookForm(payload);
+      this.addBooks(payload);
+      this.initForm();
+    },
+    onReset(e) {
+      e.preventDefault();
+      this.$refs.addBookModal.hide();
       this.initForm();
     }
   },
