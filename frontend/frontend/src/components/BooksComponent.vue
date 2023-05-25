@@ -87,6 +87,8 @@ export default {
         genre : "",
         read :[],
       },
+      message: "",      
+      showMessage: false
     };
   },
 
