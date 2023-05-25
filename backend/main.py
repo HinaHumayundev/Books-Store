@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -61,11 +61,21 @@ BOOKS = [
 ]
 
 #books route handler
-@app.route('/books', methods=['GET'])
+@app.route('/books', methods=['GET', 'POST'])
 def all_books():
-    return jsonify(
-        {'books': BOOKS, 'status': 'success'}
-    )
+    response_object ={'status':'success'}
+    if request.method == 'POST':
+        post_data = request.get_json()
+        BOOKS.append({
+            'title': post_data.get('title'),
+            'genre': post_data.get('genre'),
+            'read': post_data.get('read')  })
+                  
+        response_object['message'] = 'New Book is added Successfully!'
+    else:
+        response_object['books'] =BOOKS
+    return jsonify(response_object)
+
 
 @app.route('/shark', methods=['GET'])
 def shark():
