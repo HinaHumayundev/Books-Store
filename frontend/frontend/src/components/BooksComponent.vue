@@ -5,9 +5,10 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/slate/bootstrap.min.css" integrity="sha384-8iuq0iaMHpnH2vSyvZMSIqQuUnQA7QM+f6srIdlgBrTSEyd//AWNMyEaSF2yPzNQ" crossorigin="anonymous">
         <div class="row">
             <div class="col-sm-12">
-                <p> Book Library 📚 </p>
+              <h1 class="text-center bg-primary" style="background: linear-gradient(to right, #757b85, #c9c8f1);border-radius:16px; font-family: 'Arial', sans-serif; color: #ffffff;">Book Library 📚</h1>
+
                 <hr><br>
-                <button type="button" class="btn btn-success btn-sm">Add Book</button>
+                <button type="button" style="background: linear-gradient(to right, #757b85, #1a1a1b); color:#ffffff;" class="btn btn-sm" @click="$refs.addBookModal.show()">Add Book</button>
                 <br><br>
                 <table class="table table-hover">
                    <thead>
@@ -35,9 +36,40 @@
                     </tr>
                    </tbody>
                 </table>
+                <footer class="bg-primary text-center" style="border-radius:10px;" >Made by Hina Humayun</footer>
  
             </div>
         </div>
+        <!-- FIrst Modal -->
+        <b-modal ref="addBookModal"
+        id="book-modal" 
+        title="Add a new book" hide-backdrop hide-footer>
+        <b-form @submit="onSubmit" @reset="onReset" class="w-100">
+        <!-- Add Title -->
+        <b-form-group id="form-title-group" label="Title:" label-for="form-title-input">
+        <b-form-input id="form-title-input" type="text" v-model="addBookForm.title" required placeholder = "Enter Book">
+
+        </b-form-input>
+        </b-form-group>
+        <!-- Add Genre -->
+        <b-form-group id="form-genre-group" label="Genre:" label-for="form-genre-input">
+        <b-form-input id="form-genre-input" type="text" v-model="addBookForm.genre" required placeholder = "Enter Genre">
+
+        </b-form-input>
+        </b-form-group>
+
+         <!-- Read? -->
+         <b-form-group id="form-read-group">
+          <b-form-checkbox-group
+          id="form-read-checkbox"
+          v-model="addBookForm.read">
+          </b-form-checkbox-group>
+         </b-form-group>
+
+         <b-button type="submit" variant="outline-info">Submit</b-button>
+         <b-button type="reset" variant="outline-danger">Reset</b-button>
+        </b-form>
+      </b-modal>
     </div>
 </div>
 </template>
@@ -49,9 +81,15 @@ export default {
   data() {
     return {
       books: [],
+      addBookForm: {
+        title : "",
+        genre : "",
+        read :[],
+      },
     };
   },
   methods: {
+    //GET Function
     getBooks() {
       const path = "http://localhost:5000/books";
       axios
@@ -64,6 +102,40 @@ export default {
           console.log(err.data);
         });
     },
+
+    addBooks(payload) {
+  const path = "http://localhost:5000/books";
+  axios
+    .post(path, payload)
+    .then(() => {
+      this.getBooks();
+    })
+    .catch((err) => {
+      console.log(err.data);
+      this.getBooks();
+    });
+},
+
+    //Used while entering a new book
+    initForm() 
+    {
+      this.addBookForm.title = "";
+      this.addBookForm.genre = "";
+      this.addBookForm.read = [];
+    },
+    onSubmit(e) {
+      e.preventDefault();
+      this.$refs.addBookModal.hide();
+      let read = false;
+      if (this.addBookForm.read[0]) read = true;
+      const payload = {
+        title : this.addBookForm.title,
+        genre: this.addBookForm.genre,
+        read,
+      };
+      this.addBookForm(payload);
+      this.initForm();
+    }
   },
   created() {
     this.getBooks(); // Corrected method name
