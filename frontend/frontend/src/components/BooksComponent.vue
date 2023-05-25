@@ -31,7 +31,7 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-info btn-sm">Update</button>
+                                <button type="button" class="btn btn-info btn-sm" v-modal.book-update-modal @click="editBook(book)">Update</button>
                                 <button type="button" class="btn btn-danger btn-sm">Delete</button>
                             </div>
                         </td>
@@ -42,7 +42,7 @@
  
             </div>
         </div>
-        <!-- FIrst Modal -->
+        <!-- Fist Modal -->
         <b-modal ref="addBookModal"
         id="book-modal" 
         title="Add a new book" hide-backdrop hide-footer>
@@ -71,6 +71,40 @@
          <b-button type="reset" variant="outline-danger">Reset</b-button>
         </b-form>
       </b-modal>
+
+
+      <!-- Second Modal -->
+      <b-modal ref="editBookModal"
+        id="book-update-modal" 
+        title="Update" hide-backdrop hide-footer>
+        <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" class="w-100">
+        <!-- Add Title -->
+        <b-form-group id="form-title-edit-group" label="Title:" label-for="form-title-edit-input">
+        <b-form-input id="form-title-edit-input" type="text" v-model="editForm.title" required placeholder = "Enter title">
+
+        </b-form-input>
+        </b-form-group>
+        <!-- Add Genre -->
+        <b-form-group id="form-genre-edit-group" label="Genre:" label-for="form-genre-edit-input">
+        <b-form-input id="form-genre-edit-input" type="text" v-model="editForm.genre" required placeholder = "Enter Genre">
+
+        </b-form-input>
+        </b-form-group>
+
+         <!-- Read? -->
+         <b-form-group id="form-read-edit-group" label-for="form-read-edit-checkbox">
+         <b-form-checkbox-group id="form-read-ediy-checkbox" v-model="editForm.read">
+         <b-form-checkbox value="read">Read</b-form-checkbox>
+          </b-form-checkbox-group>
+           </b-form-group>
+
+         <b-button type="submit" variant="outline-info">Submit</b-button>
+         <b-button type="reset" variant="outline-danger">Reset</b-button>
+        </b-form>
+      </b-modal>
+
+
+      <!--  -->
     </div>
 </div>
 </template>
@@ -88,7 +122,14 @@ export default {
         read :[],
       },
       message: "",      
-      showMessage: false
+      showMessage: false,
+      editForm :{
+        BookId: "",
+        title : "",
+        genre : "",
+        read :[],
+      }
+
     };
   },
 
